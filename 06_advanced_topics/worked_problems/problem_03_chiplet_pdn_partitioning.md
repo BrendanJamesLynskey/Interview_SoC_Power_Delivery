@@ -64,11 +64,11 @@ Total power TSVs: 1200 + 1200 + 400 = 2800
 With keep-out radius of 10 um around each TSV (20 um exclusion diameter):
 
 ```
-Area per TSV = pi * (20e-6)^2 = 1257 um^2
-Total exclusion = 2800 * 1257 = 3.52e6 um^2 = 3.52 mm^2
+Area per TSV = pi * (10e-6)^2 = 314 um^2
+Total exclusion = 2800 * 314 = 0.88e6 um^2 = 0.88 mm^2
 ```
 
-Interposer area: 25*20 = 500 mm^2. TSV overhead: 3.52/500 = 0.7%.
+Interposer area: 25*20 = 500 mm^2. TSV overhead: 0.88/500 = 0.18%.
 
 ### Step 3: Calculate microbump requirements
 
@@ -120,11 +120,13 @@ V_IR_interposer = I * R_total = 30 * 0.44e-3 = 13.2 mV
 
 This is 13.2 / 800 = 1.65% of Vdd. Acceptable but significant -- must be included in the total IR drop budget.
 
+For the I/O chiplet, with the same 0.3 mOhm RDL estimate: 40/267 + 0.3 + 21.9/200 + 40/267 = 0.15 + 0.3 + 0.11 + 0.15 = 0.71 mOhm, so V_IR = 10 * 0.71e-3 = 7.1 mV (0.7% of 1.05 V).
+
 ### Summary
 
 | Chiplet | Power TSVs | Power Microbumps | Interposer R | IR Drop |
 |---------|-----------|-----------------|--------------|---------|
 | Compute A | 1200 | 1600 | 0.44 mOhm | 13.2 mV |
 | Compute B | 1200 | 1600 | 0.44 mOhm | 13.2 mV |
-| I/O | 400 | 534 | 0.60 mOhm | 6.0 mV |
+| I/O | 400 | 534 | 0.71 mOhm | 7.1 mV |
 | **Total** | **2800** | **3734** | -- | -- |

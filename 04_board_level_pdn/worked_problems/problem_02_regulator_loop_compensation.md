@@ -88,54 +88,41 @@ fp_comp = fsw / 2 = 500 kHz
 
 ### Step 3: Calculate component values
 
-For a Type II compensator using a transconductance amplifier (OTA):
+For a Type II compensator using a transconductance amplifier (OTA), the output network is R2 in series with C2 (setting the zero), with C1 in parallel (setting the high-frequency pole):
 
 ```
-C1 = Gm_ea / (2 * pi * fc * Gps_dc * Gfb)
+fz_comp = 1 / (2 * pi * R2 * C2)
+fp_comp = 1 / (2 * pi * R2 * C1)     (C1 << C2)
 ```
 
-where Gfb is the feedback divider gain = 0.706.
+Between the zero and the HF pole the compensator gain is flat at Gm_ea * R2, so R2 sets the crossover. At fc the power stage is already rolling off above its 3.74 kHz pole:
 
 ```
-C1 = 1e-3 / (2 * pi * 100e3 * 8.5 * 0.706)
-C1 = 1e-3 / (3.77e6)
-C1 = 265 pF
+|Gps(100 kHz)| = 8.5 * |1 + j(100/637)| / |1 + j(100/3.74)| = 8.5 * 1.012 / 26.7 = 0.322
 ```
 
-For the compensator zero:
+Loop gain = 1 at fc:
 
 ```
-R2 = 1 / (2 * pi * fz_comp * C1) ... 
-```
-
-Actually, for an OTA-based Type II:
-- C1 sets the integrator pole (pole at origin)
-- R2 in series with C2 provides the zero
-- C1 sets the high-frequency pole with R2
-
-```
-R2 = 1 / (2 * pi * fz_comp * C2)
-```
-
-And the high-frequency pole:
-
-```
-fp_comp = 1 / (2 * pi * R2 * C1)
-```
-
-From the high-frequency pole equation:
-
-```
-R2 = 1 / (2 * pi * fp_comp * C1) = 1 / (2 * pi * 500e3 * 265e-12) = 1.20 kOhm
+Gm_ea * R2 * |Gps(fc)| * Gfb = 1
+R2 = 1 / (1e-3 * 0.322 * 0.706) = 4.40 kOhm
 ```
 
 From the zero:
 
 ```
-C2 = 1 / (2 * pi * fz_comp * R2) = 1 / (2 * pi * 33e3 * 1200) = 4.02 nF
+C2 = 1 / (2 * pi * fz_comp * R2) = 1 / (2 * pi * 33e3 * 4400) = 1.10 nF
 ```
 
-Select standard values: R2 = 1.2 kOhm, C1 = 270 pF, C2 = 3.9 nF.
+From the high-frequency pole:
+
+```
+C1 = 1 / (2 * pi * fp_comp * R2) = 1 / (2 * pi * 500e3 * 4400) = 72 pF
+```
+
+Select standard values: R2 = 4.3 kOhm, C1 = 75 pF, C2 = 1.1 nF (fz = 33.6 kHz, fp = 493 kHz). A full loop-gain calculation with these values gives fc = 95 kHz.
+
+(Sizing the network from the DC plant gain instead — C1 = Gm_ea / (2*pi*fc*Gps_dc*Gfb) = 265 pF, R2 = 1.2 kOhm, C2 = 3.9 nF — ignores the plant roll-off at fc and puts the gain in the wrong place: that network crosses over at only about 35 kHz with 51 degrees of phase margin.)
 
 ### Step 4: Verify phase margin
 
@@ -174,10 +161,10 @@ This exceeds the 55-degree target with comfortable margin.
 
 | Component | Value |
 |-----------|-------|
-| R2 | 1.2 kOhm |
-| C1 | 270 pF |
-| C2 | 3.9 nF |
-| Crossover frequency | 100 kHz |
+| R2 | 4.3 kOhm |
+| C1 | 75 pF |
+| C2 | 1.1 nF |
+| Crossover frequency | ~95 kHz (100 kHz target) |
 | Phase margin | ~71 degrees |
 | Compensator zero | 34 kHz |
 | High-frequency pole | 490 kHz |

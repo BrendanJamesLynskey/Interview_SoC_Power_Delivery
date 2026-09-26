@@ -93,14 +93,6 @@ At f = 10 MHz: Z_inductive = 2 * pi * 10e6 * 0.2e-9 = 12.6 mOhm (exceeds target)
 At f = 1.5 MHz: Z_inductive = 2 * pi * 1.5e6 * 0.2e-9 = 1.88 mOhm (exceeds target)
 
 ```
-f_high = Ztarget / (2 * pi * ESL_total)
-f_high = 1.5e-3 / (2 * pi * 0.2e-9)
-f_high = 1.19 GHz
-```
-
-Correcting the arithmetic (note the units):
-
-```
 f_high = 1.5e-3 / (2 * pi * 0.2e-9)
 f_high = 1.5e-3 / 1.257e-9
 f_high = 1.19e6 Hz = 1.19 MHz

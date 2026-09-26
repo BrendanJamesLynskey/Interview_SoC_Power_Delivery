@@ -25,10 +25,12 @@ Normalized frequency: f_norm = ((Vdd - 0.30) / (0.85 - 0.30))^1.3 * (0.85 / Vdd)
 | OP | Vdd (V) | f_norm | Frequency (GHz) |
 |----|---------|--------|-----------------|
 | 5 (max) | 0.85 | 1.000 | 3.50 |
-| 4 | 0.75 | 0.716 | 2.51 |
-| 3 | 0.65 | 0.460 | 1.61 |
-| 2 | 0.55 | 0.233 | 0.82 |
-| 1 (min) | 0.50 | 0.143 | 0.50 |
+| 4 | 0.75 | 0.800 | 2.80 |
+| 3 | 0.65 | 0.602 | 2.11 |
+| 2 | 0.55 | 0.409 | 1.43 |
+| 1 (min) | 0.50 | 0.143 (specified) | 0.50 |
+
+At 0.50 V the formula gives f_norm = 0.315 (1.10 GHz); OP1 uses the specified 0.5 GHz minimum, which is conservative against the model.
 
 ### Step 2: Calculate dynamic power at each point
 
@@ -37,16 +39,16 @@ P_dyn = P_dyn_max * (Vdd/0.85)^2 * (f/3.5)
 | OP | Vdd (V) | f (GHz) | P_dyn (W) |
 |----|---------|---------|-----------|
 | 5 | 0.85 | 3.50 | 15.00 |
-| 4 | 0.75 | 2.51 | 8.38 |
-| 3 | 0.65 | 1.61 | 4.16 |
-| 2 | 0.55 | 0.82 | 1.62 |
-| 1 | 0.50 | 0.50 | 0.82 |
+| 4 | 0.75 | 2.80 | 9.34 |
+| 3 | 0.65 | 2.11 | 5.28 |
+| 2 | 0.55 | 1.43 | 2.57 |
+| 1 | 0.50 | 0.50 | 0.74 |
 
 ### Step 3: Estimate leakage power at each point
 
 Leakage scales approximately as: P_leak ~ exp(-alpha * Vth / (n*Vt)) * Vdd
 
-Where Vt = kT/q ~ 26 mV at room temperature. Simplified: leakage roughly halves for every 50 mV reduction in Vdd (due to DIBL and subthreshold effects).
+Where Vt = kT/q ~ 26 mV at room temperature. Simplified: leakage roughly halves for every 100 mV reduction in Vdd (due to DIBL and subthreshold effects).
 
 | OP | Vdd (V) | P_leak (W) approx |
 |----|---------|-------------------|
@@ -61,10 +63,10 @@ Where Vt = kT/q ~ 26 mV at room temperature. Simplified: leakage roughly halves 
 | OP | Vdd | f | P_total (W/core) | Savings vs OP5 |
 |----|-----|---|-------------------|----------------|
 | 5 | 0.85 | 3.50 | 18.00 | 0% |
-| 4 | 0.75 | 2.51 | 9.88 | 45% |
-| 3 | 0.65 | 1.61 | 4.91 | 73% |
-| 2 | 0.55 | 0.82 | 2.00 | 89% |
-| 1 | 0.50 | 0.50 | 1.09 | 94% |
+| 4 | 0.75 | 2.80 | 10.84 | 40% |
+| 3 | 0.65 | 2.11 | 6.03 | 67% |
+| 2 | 0.55 | 1.43 | 2.95 | 84% |
+| 1 | 0.50 | 0.50 | 1.01 | 94% |
 
 ### Step 5: DVFS transition time
 

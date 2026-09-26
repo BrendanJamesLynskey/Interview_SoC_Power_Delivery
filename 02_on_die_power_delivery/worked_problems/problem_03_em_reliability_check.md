@@ -63,13 +63,6 @@ The EM margin is 0.216, which is far below 1.0. This is an EM violation -- the s
 The resistance per unit length of the stripe:
 
 ```
-R_per_um = rho / (W * T) = 2.2e-8 ohm-cm / (4e-4 cm * 0.9e-4 cm)
-R_per_um = 2.2e-8 / (3.6e-8) = 0.611 ohm/cm = 6.11 mOhm/mm = 6.11e-3 mOhm/um
-```
-
-Wait, let us be more careful with units:
-
-```
 rho = 2.2 uOhm-cm = 2.2e-6 Ohm-cm = 2.2e-8 Ohm-m
 
 R_per_unit_length = rho / A_cross

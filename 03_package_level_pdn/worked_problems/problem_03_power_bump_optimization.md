@@ -23,9 +23,9 @@ The target impedance is 1.2 mOhm. Determine:
 ### Step 1: Total available bumps at 130 um pitch
 
 ```
-Bumps_x = floor(10000 / 130) + 1 = 77 + 1 = 78
+Bumps_x = floor(10000 / 130) + 1 = 76 + 1 = 77
 Bumps_y = floor(8000 / 130) + 1 = 61 + 1 = 62
-Total_bumps = 78 * 62 = 4836
+Total_bumps = 77 * 62 = 4774
 ```
 
 ### Step 2: EM constraint
@@ -73,11 +73,11 @@ N >= 39.3 -> 40 bumps
 Total power/ground bumps: 350 VDD + 350 VSS = 700
 
 ```
-P/G fraction = 700 / 4836 = 14.5%
-Signal bumps available = 4836 - 700 = 4136
+P/G fraction = 700 / 4774 = 14.7%
+Signal bumps available = 4774 - 700 = 4074
 ```
 
-This is a modest P/G allocation. Some designs allocate 40-60% for power/ground. The remaining 4136 bumps are available for signal I/O.
+This is a modest P/G allocation. Some designs allocate 40-60% for power/ground. The remaining 4074 bumps are available for signal I/O.
 
 Verify that the 350 VDD bumps provide adequate IR drop:
 
@@ -104,41 +104,41 @@ Bumps_y = floor(8000 / 80) + 1 = 100 + 1 = 101
 Total_bumps = 126 * 101 = 12726
 ```
 
-With 2.63x more total bumps, the same 350 VDD bumps now consume only:
+With 2.67x more total bumps, the same 350 VDD bumps now consume only:
 
 ```
 P/G fraction = 700 / 12726 = 5.5%
 ```
 
-Alternatively, if we allocate the same 14.5% to power:
+Alternatively, if we allocate the same 14.7% to power:
 
 ```
-N_vdd = 0.145 * 12726 / 2 = 923 VDD bumps
+N_vdd = 0.147 * 12726 / 2 = 933 VDD bumps
 ```
 
-With 923 VDD bumps:
+With 933 VDD bumps:
 
 ```
-R_bump = 10 mOhm / 923 = 0.0108 mOhm (IR drop = 0.38 mV)
-Z_L_300MHz = 2*pi*300e6 * (25e-12/923) = 51.1 uOhm
-EM current per bump = 35/923 = 37.9 mA (3.2x margin)
+R_bump = 10 mOhm / 933 = 0.0107 mOhm (IR drop = 0.38 mV)
+Z_L_300MHz = 2*pi*300e6 * (25e-12/933) = 50.5 uOhm
+EM current per bump = 35/933 = 37.5 mA (3.2x margin)
 ```
 
 However, microbumps at 80 um pitch may have higher per-bump resistance (~15-20 mOhm) and inductance (~20 pH) due to their smaller size. Even with 15 mOhm per bump:
 
 ```
-R_total = 15/923 = 0.0163 mOhm (still excellent)
+R_total = 15/933 = 0.0161 mOhm (still excellent)
 ```
 
 ### Summary
 
 | Parameter | 130 um pitch | 80 um pitch |
 |-----------|-------------|-------------|
-| Total bumps | 4836 | 12726 |
+| Total bumps | 4774 | 12726 |
 | VDD bumps (EM-limited) | 350 | 350 (same requirement) |
-| P/G fraction | 14.5% | 5.5% (or allocate more) |
+| P/G fraction | 14.7% | 5.5% (or allocate more) |
 | Bump IR drop | 1.0 mV | 1.0 mV (same N) |
 | Inductance at 300 MHz | 0.135 mOhm | 0.135 mOhm (same N) |
-| Signal bumps available | 4136 | 12026 |
+| Signal bumps available | 4074 | 12026 |
 
-The finer pitch primarily benefits signal I/O density. However, if more VDD bumps are allocated, the PDN performance improves significantly (3x lower resistance and inductance).
+The finer pitch primarily benefits signal I/O density. However, if more VDD bumps are allocated, the PDN performance improves significantly (~2.7x lower resistance and inductance).

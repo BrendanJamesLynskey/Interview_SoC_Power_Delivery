@@ -101,30 +101,31 @@ Total: 150 caps.
 
 Verify at key frequencies:
 
-**At 10 MHz:** The 10 uF caps are near resonance. Z = ESR/30 = 5/30 = 0.167 mOhm. Also, the 1 uF caps are still capacitive: Z = 1/(2*pi*10e6*40e-6) = 0.398 mOhm. Parallel: ~0.118 mOhm. Passes.
+**At 10 MHz:** The 10 uF caps are just above resonance (4.6 MHz): per cap |Z| = |5 + j(7.54 - 1.59)| = 7.8 mOhm, so 0.26 mOhm for 30. The 1 uF caps are still capacitive: per cap |Z| = |4 + j(6.28 - 15.9)| = 10.4 mOhm, so 0.26 mOhm for 40. Combined as complex impedances: ~0.24 mOhm. Passes.
 
-**At 50 MHz:** The 1 uF caps are near resonance (f_res=15.9 MHz, so they are inductive at 50 MHz). Z_1uF = 2*pi*50e6*(100e-12/40) = 0.785 mOhm. The 100 nF caps are near resonance (f_res=56.3 MHz): Z_100nF = ESR/80 = 3/80 = 0.0375 mOhm. Parallel: ~0.037 mOhm. Passes.
+**At 50 MHz:** The 1 uF caps are inductive (f_res = 15.9 MHz): Z_1uF = 2*pi*50e6*(100e-12/40) = 0.785 mOhm. The 100 nF caps are just below resonance (f_res = 56.3 MHz): per cap |Z| = |3 + j(25.1 - 31.8)| = 7.3 mOhm, so 0.092 mOhm for 80. Combined as complex impedances: ~0.11 mOhm. Passes.
 
-**At 30 MHz (potential anti-resonance between 10 uF and 1 uF groups):** This is where the 10 uF group is inductive and the 1 uF group is capacitive. The anti-resonance peak is approximately:
+**At ~36 MHz (anti-resonance between the 1 uF and 100 nF groups):** Above 15.9 MHz the 1 uF group is inductive, while below 56.3 MHz the 100 nF group is still capacitive, so the two groups form a parallel resonance between them (the 10 uF and 1 uF groups do not: by 30 MHz both are inductive).
 
 ```
-Z_anti ~ sqrt(L_10uF_group / C_1uF_group) / Q
-L_10uF_group = 120 pH / 30 = 4 pH
-C_1uF_group = 40 uF
-Z_anti_undamped = sqrt(4e-12 / 40e-6) = sqrt(1e-7) = 316 uOhm = 0.316 mOhm
+L_1uF_group = 100 pH / 40 = 2.5 pH
+C_100nF_group = 80 * 100 nF = 8 uF
+Z0 = sqrt(2.5e-12 / 8e-6) = 0.56 mOhm
 ```
 
-The damping from ESR reduces this further. With ESR_total = 5/30 = 0.167 mOhm (10 uF group), the Q is moderate and the peak is well controlled. Passes.
+Z0 is the characteristic impedance, not the peak. Evaluating the full three-group network gives a peak of **0.99 mOhm at 36.5 MHz — this FAILS the 0.8 mOhm target** by about 24%.
 
-**At 200 MHz:** The 100 nF group is inductive: Z = 2*pi*200e6*(80e-12/80) = 628 uOhm = 0.628 mOhm. Passes.
+**Rebalanced allocation:** Shifting capacitors from the 10 uF group to the 1 uF group lowers the 1 uF group's inductance and moves the anti-resonance down. A full-network sweep of 150-cap mixes finds, for example, 10 x 10 uF + 85 x 1 uF + 55 x 100 nF with a peak of about 0.75 mOhm across 5-200 MHz.
+
+**At 200 MHz:** The 100 nF group is inductive: Z = 2*pi*200e6*(80e-12/80) = 628 uOhm = 0.628 mOhm for the original 80. (With the rebalanced 55 x 100 nF, the 85 x 1 uF group shares the load and the full-network value is about 0.74 mOhm.) Passes.
 
 ### Summary
 
 | MLCC Value | Quantity | Purpose |
 |-----------|----------|---------|
-| 10 uF | 30 | Low-frequency coverage (5-20 MHz) |
-| 1 uF | 40 | Mid-frequency coverage (10-60 MHz) |
-| 100 nF | 80 | High-frequency coverage (30-200 MHz) |
+| 10 uF | 10 | Low-frequency coverage (5-20 MHz) |
+| 1 uF | 85 | Mid-frequency coverage (10-60 MHz) |
+| 100 nF | 55 | High-frequency coverage (30-200 MHz) |
 | **Total** | **150** | **5 MHz to 200 MHz** |
 
-All checked frequencies show impedance below 0.8 mOhm. A full simulation would verify the complete profile and identify any remaining anti-resonance peaks.
+The first-pass 30/40/80 split fails at its 1 uF–100 nF anti-resonance (0.99 mOhm at 36.5 MHz); the rebalanced split keeps the computed peak at about 0.75 mOhm. Spot checks at a few frequencies miss anti-resonances — sweep the full profile.

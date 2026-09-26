@@ -78,7 +78,7 @@ Assuming the plane overlap area is 30 mm x 30 mm (package area + surrounding reg
 ```
 C = epsilon_0 * epsilon_r * A / d
 C = 8.854e-12 * 4.2 * 900e-6 / 76e-6
-C = 8.854e-12 * 4.2 * 11842
+C = 8.854e-12 * 4.2 * 11.84
 C = 441 pF
 ```
 

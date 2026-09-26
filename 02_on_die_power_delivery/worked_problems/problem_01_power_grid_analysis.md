@@ -104,7 +104,7 @@ R_grid ~ R_M10 || R_M11 = (5 * 3) / (5 + 3) = 1.875 mOhm
 The current flowing to the worst-case point: if the point has a local current density equal to the average:
 
 ```
-J_area = 30 A / (4mm * 4mm) = 1.875 mA/um^2 ... 
+J_area = 30 A / (4mm * 4mm) = 1.875 A/mm^2 = 1.875 uA/um^2
 ```
 
 Let us compute the current drawn by the 400 um x 400 um cell:

@@ -66,9 +66,9 @@ Option 1: Add intermediate-value MLCCs (e.g., 10 nF) with resonant frequency nea
 
 Option 2: Reduce the mounting inductance of the PCB ceramic caps (use via-in-pad, multiple vias) to push their inductive crossover to higher frequency, overlapping with the package caps.
 
-The number of 10 nF caps needed: at 80 MHz with ESL = 1 nH (PCB mount), each cap has Z = 2*pi*80e6*1e-9 = 0.503 mOhm per cap at 80 MHz. This is below target, so even a few caps would help. With 10 caps: Z_inductive = 503/10 = 50 uOhm -- far below target. But we also need the capacitive impedance at 80 MHz: Z_cap = 1/(2*pi*80e6*10e-8*10) = 2.0 mOhm for 10 caps. The parallel combination of the inductive and capacitive behavior depends on whether 80 MHz is above or below resonance for 10 nF. f_res for 10 nF with 1 nH = 50.3 MHz, so at 80 MHz the 10 nF caps are inductive: Z = 0.503 mOhm/cap. With 10 caps: 50 uOhm. Combined in parallel with the existing network, this dramatically reduces the peak.
+Check Option 1 numerically: at 80 MHz with ESL = 1 nH (PCB mount), each cap has X_L = 2*pi*80e6*1e-9 = 0.503 Ohm = 503 mOhm, and X_C = 1/(2*pi*80e6*10e-9) = 199 mOhm. f_res for 10 nF with 1 nH is 50.3 MHz, so at 80 MHz the caps are inductive: net 304 mOhm per cap, or about 30 mOhm for 10 caps. That is twenty times the 1.5 mOhm target and far above the 2.2 mOhm network impedance, so ten PCB-mounted 10 nF caps would barely change the peak. Matching the target this way would take hundreds of caps: at 80 MHz, 1 nH of mounting inductance, not capacitance value, sets each cap's impedance.
 
-Recommendation: add 10 x 10 nF MLCCs on the PCB near the BGA.
+Recommendation: attack the inductance (Option 2: via-in-pad, multiple vias, caps directly under the BGA) and add package-level capacitance close to the die; PCB-mounted 10 nF caps are ineffective at 80 MHz.
 
 **Fix for 800 MHz (1.8 mOhm):**
 
@@ -92,5 +92,5 @@ Need to increase from 111 nF to 133 nF -- about 20% more on-die decoupling. This
 | Problem | Frequency | Current Z | Fix | Target Z |
 |---------|-----------|-----------|-----|----------|
 | Anti-resonance A | 200 kHz | 2.8 mOhm | Add 6 bulk caps or increase VRM BW | < 1.5 mOhm |
-| Anti-resonance C | 80 MHz | 2.2 mOhm | Add 10 x 10 nF MLCCs | < 1.5 mOhm |
+| Anti-resonance C | 80 MHz | 2.2 mOhm | Reduce PCB cap mounting inductance; add package-level caps (PCB 10 nF caps are ~30 mOhm per 10 at 80 MHz) | < 1.5 mOhm |
 | Inductive rise | 800 MHz | 1.8 mOhm | Add 20% more on-die decaps | < 1.5 mOhm |

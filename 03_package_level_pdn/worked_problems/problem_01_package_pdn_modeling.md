@@ -50,19 +50,19 @@ The current must spread from the die area (12 mm x 12 mm) to the BGA area (35 mm
 Average spreading distance: (35 - 12) / 2 = 11.5 mm on each side. The effective number of squares is approximately:
 
 ```
-N_squares ~ ln(A_package / A_die) / (2 * pi) ~ ln(35^2 / 12^2) / (2*pi) ~ ln(8.51) / 6.28 ~ 2.14 / 6.28 ~ 0.34 squares
+N_squares ~ ln(r_package / r_die) / (2 * pi) = ln(A_package / A_die) / (4 * pi) ~ ln(35^2 / 12^2) / (4*pi) ~ ln(8.51) / 12.57 ~ 2.14 / 12.57 ~ 0.17 squares
 ```
 
-(Using the concentric ring approximation for spreading from a smaller area to a larger area.)
+(Using the concentric ring approximation for spreading from a smaller area to a larger area: R = Rsh * ln(r2/r1) / (2 * pi), and ln(r2/r1) = ln(A2/A1) / 2.)
 
 ```
-R_plane = Rsh * N_squares = 1.11 * 0.34 = 0.38 mOhm
+R_plane = Rsh * N_squares = 1.11 * 0.17 = 0.19 mOhm
 ```
 
 This is for one plane (VDD). The VSS plane has the same resistance. Total plane resistance:
 
 ```
-R_planes = 2 * 0.38 = 0.76 mOhm
+R_planes = 2 * 0.19 = 0.38 mOhm
 ```
 
 ### Step 4: DC resistance -- C4 bumps
@@ -77,8 +77,8 @@ R_C4 = 15 mOhm / 400 = 0.0375 mOhm
 
 ```
 R_total = R_BGA + R_vias + R_planes + R_C4
-R_total = 0.015 + 0.01 + 0.76 + 0.0375
-R_total = 0.82 mOhm
+R_total = 0.015 + 0.01 + 0.38 + 0.0375
+R_total = 0.44 mOhm
 ```
 
 The plane spreading resistance dominates the total DC resistance.
@@ -105,10 +105,10 @@ The inductance per square of the plane pair:
 L_sheet = mu_0 * d = 4*pi*1e-7 * 40e-6 = 50.3 pH/sq
 ```
 
-Using the same number of effective squares as for resistance (0.34):
+Using the same number of effective squares as for resistance (0.17):
 
 ```
-L_spread ~ L_sheet * N_squares = 50.3 * 0.34 = 17.1 pH
+L_spread ~ L_sheet * N_squares = 50.3 * 0.17 = 8.6 pH
 ```
 
 This is a rough estimate. Electromagnetic simulation would give a more accurate value, typically in the range of 10 to 50 pH for this type of package.
@@ -119,21 +119,21 @@ The plane capacitance and spreading inductance form a resonant circuit:
 
 ```
 f_res = 1 / (2 * pi * sqrt(L_spread * C_plane))
-f_res = 1 / (2 * pi * sqrt(17.1e-12 * 1.03e-9))
-f_res = 1 / (2 * pi * sqrt(17.6e-21))
-f_res = 1 / (2 * pi * 4.2e-11)
-f_res = 1 / (2.64e-10)
-f_res = 3.79 GHz
+f_res = 1 / (2 * pi * sqrt(8.6e-12 * 1.03e-9))
+f_res = 1 / (2 * pi * sqrt(8.86e-21))
+f_res = 1 / (2 * pi * 9.4e-11)
+f_res = 1 / (5.91e-10)
+f_res = 1.69 GHz
 ```
 
 ### Summary
 
 | Parameter | Value |
 |-----------|-------|
-| Total DC resistance (BGA to die) | 0.82 mOhm |
-| Dominant contributor | Plane spreading (0.76 mOhm) |
+| Total DC resistance (BGA to die) | 0.44 mOhm |
+| Dominant contributor | Plane spreading (0.38 mOhm) |
 | Plane capacitance | 1.03 nF |
-| Spreading inductance | ~17 pH |
-| Plane resonance frequency | ~3.8 GHz |
+| Spreading inductance | ~9 pH |
+| Plane resonance frequency | ~1.7 GHz |
 
-The 0.82 mOhm total DC resistance is below a typical 1 mOhm target, so the package contributes acceptably to the DC IR drop budget. The plane resonance at 3.8 GHz is well above the frequency range where discrete decoupling is needed, so plane resonance is not a concern for this package geometry.
+The 0.44 mOhm total DC resistance is below a typical 1 mOhm target, so the package contributes acceptably to the DC IR drop budget. The plane resonance at 1.7 GHz is well above the frequency range where discrete decoupling is needed, so plane resonance is not a concern for this package geometry.

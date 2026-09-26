@@ -30,9 +30,9 @@ Evaluate efficiency, area, and transient response for each.
 P_loss = (Vin - Vout) * Iout = (1.0 - 0.55) * 10 = 4.5 W
 ```
 
-**Area:** Pass transistor for 10 A with 150 mV max dropout needs Rdson < 15 mOhm. For a PMOS with Rdson ~ 50 mOhm*um, the total width needed: W = 50 / 0.015 = 3333 um = 3.3 mm. At 0.5 um per finger: ~6600 fingers. Total pass transistor area: approximately 0.3 to 0.5 mm^2. Error amplifier and reference: 0.01 mm^2. Total: ~0.5 mm^2.
+**Area:** Pass transistor for 10 A with 150 mV max dropout needs Rdson < 15 mOhm. For a PMOS with Rdson*W ~ 50 Ohm*um, the total width needed: W = 50 / 0.015 = 3333 um = 3.3 mm. At 0.5 um per finger: ~6600 fingers. Total pass transistor area: approximately 0.3 to 0.5 mm^2. Error amplifier and reference: 0.01 mm^2. Total: ~0.5 mm^2.
 
-**Transient response:** Bandwidth > 10 MHz. For a 5 A step in 10 ns: V_droop ~ 5 * ESR_pass ~ 5 * 15e-3 = 75 mV (before loop responds). With on-die output decoupling of 100 nF: V_cap_droop = 5 * 10e-9 / 100e-9 = 0.5 mV (negligible during 10 ns). Loop response time: ~50 ns. Fast.
+**Transient response:** Bandwidth > 10 MHz. For a 5 A step in 10 ns: V_droop ~ 5 * ESR_pass ~ 5 * 15e-3 = 75 mV (before loop responds). With on-die output decoupling of 100 nF: V_cap_droop = 5 * 10e-9 / 100e-9 = 0.5 V — not negligible: 100 nF cannot carry a 5 A step for 10 ns, let alone the ~50 ns loop response time. The fast loop only helps if the on-die decoupling is sized for the step (e.g. ~1 uF per 50 mV for 10 ns).
 
 ### Option 2: 2:1 SC + LDO
 
@@ -65,7 +65,7 @@ Revised again: Use an SC with selectable ratios: 1:1 (bypass, output = 1.0 V) an
 | 0.70 V | 1:1 | 1.0 V | 100% | 70% | 70% |
 | 0.55 V | 2:3 | 0.667 V | ~90% | 82.5% | 74.3% |
 
-**Area:** SC flying capacitors: For 10 A at 100 MHz switching: C_fly = I / (f * delta_V) = 10 / (100e6 * 0.05) = 2 uF. At 15 fF/um^2 (MOS cap): area = 2e-6 / 15e-15 = 0.133 mm^2. Switches + LDO: ~0.5 mm^2. Total: ~0.65 mm^2.
+**Area:** SC flying capacitors: For 10 A at 100 MHz switching: C_fly = I / (f * delta_V) = 10 / (100e6 * 0.05) = 2 uF. At 15 fF/um^2 (MOS cap): area = 2e-6 / 15e-15 = 1.33e8 um^2 = 133 mm^2 — larger than most dies. Switches + LDO: ~0.5 mm^2. Total: ~134 mm^2, so at 10 A this SC stage is only practical with much denser capacitors (e.g. deep-trench) or a higher switching frequency.
 
 **Transient response:** Same as LDO alone (the LDO is the final regulation stage).
 
@@ -96,9 +96,9 @@ P_loss = P_out * (1/eta - 1) = 5.5 * (1/0.83 - 1) = 5.5 * 0.205 = 1.13 W
 | eta at 0.85 V | 85% | 85% | 88% |
 | eta at 0.55 V | 55% | 74% | 83% |
 | P_loss at 0.55 V | 4.5 W | 1.9 W | 1.13 W |
-| Die area | 0.5 mm^2 | 0.65 mm^2 | 0.4 mm^2 |
+| Die area | 0.5 mm^2 | ~134 mm^2 (MOS flying caps) | 0.4 mm^2 |
 | Package area | 0 | 0 | 1 mm^2 |
 | Transient BW | >10 MHz | >10 MHz | ~40 MHz |
 | Complexity | Low | Medium | High |
 
-The buck converter is the most efficient but requires package inductors. The LDO is simplest but has poor efficiency at low Vout. The SC+LDO hybrid provides intermediate efficiency without inductors.
+The buck converter is the most efficient but requires package inductors. The LDO is simplest but has poor efficiency at low Vout. The SC+LDO hybrid provides intermediate efficiency without inductors, but its flying capacitors need a much denser capacitor technology than MOS decap to fit on the die.

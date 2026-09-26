@@ -110,20 +110,24 @@ This is a large number of capacitors, which is realistic for a high-performance 
 
 ### Step 5: Verify at critical frequencies
 
-**At 500 kHz:** Polymer caps are near resonance. Z_polymer = 8/14 = 0.571 mOhm. Passes.
+Group impedances must be combined as complex numbers: an inductive group in parallel with a capacitive group partly cancels, so the parallel magnitude can be larger than either.
 
-**At 3 MHz:** 22 uF MLCCs are inductive: Z = 2*pi*3e6*(1.1e-9/33) = 629 uOhm = 0.629 mOhm. 1 uF MLCCs are capacitive: Z = 1/(2*pi*3e6*100e-6) = 531 uOhm = 0.531 mOhm. Parallel: 0.288 mOhm. Passes.
+**At 500 kHz:** Polymer caps are near resonance. The full network (all four groups) gives 0.31 mOhm. Passes.
 
-**At 10 MHz:** 1 uF caps near resonance (inductive side): Z = 2*pi*10e6*(1.0e-9/100) = 628 uOhm. 100 nF caps capacitive: Z = 1/(2*pi*10e6*160*100e-9) = 99.5 uOhm. Parallel: ~86 uOhm. Passes.
+**At 3 MHz:** 22 uF MLCCs are inductive: X = +2*pi*3e6*(1.1e-9/33) = +0.629 mOhm. 1 uF MLCCs are capacitive: X ≈ -1/(2*pi*3e6*100e-6) = -0.531 mOhm. These are close to equal and opposite, so the two groups resonate. The full network gives 0.79 mOhm at 3 MHz and an anti-resonance peak of **1.69 mOhm at 2.6 MHz — FAILS**.
 
-**At 30 MHz:** 100 nF caps inductive: Z = 2*pi*30e6*(0.9e-9/160) = 1.06 mOhm. Marginal -- exactly at target.
+**At 10 MHz:** 1 uF caps inductive (X = +0.628 mOhm); 100 nF caps capacitive (X ≈ -0.0995 mOhm). The full network gives 0.87 mOhm at 10 MHz, rising to an anti-resonance peak of **8.1 mOhm at 11.5 MHz — FAILS** by a factor of 7.6. With 100 and 160 parts in parallel, the group ESRs (0.02 and 0.009 mOhm) are far too small to damp this resonance.
+
+**At 30 MHz:** The groups' inductances act in parallel: the full network gives 0.47 mOhm. Passes.
+
+**Conclusion:** Sizing each group only for its own f_high puts high-Q anti-resonances between the groups. A full-network sweep is needed. For these parts, fewer values in larger groups work better. For example, 6 x 100 uF polymer + 110 x 22 uF + 80 x 1 uF (196 caps, no 100 nF) keeps the whole 200 kHz–30 MHz profile at or below 1.02 mOhm (highest at the 30 MHz band edge; the one anti-resonance is 0.94 mOhm at 3.8 MHz).
 
 ### Summary
 
 | Parameter | Value |
 |-----------|-------|
 | Target impedance | 1.06 mOhm |
-| Total PCB caps | 307 |
+| Total PCB caps | 307 as first sized (fails: 8.1 mOhm peak at 11.5 MHz); 196 in the revised mix |
 | Frequency coverage | 200 kHz to 30 MHz |
 | Estimated BOM cost | $15-30 (caps only) |
 | Board area | ~10 cm^2 |
