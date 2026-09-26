@@ -81,11 +81,11 @@ B) Wire bonds from the package lead frame
 C) TSVs from the wafer backside to buried power rails  
 D) Optical waveguides  
 
-**Q12.** In a 3D stacked architecture, the die furthest from the package substrate has:
+**Q12.** In a 3D stacked architecture powered from the package substrate, the die furthest from the substrate has:
 
-A) The lowest temperature and lowest IR drop  
-B) The highest temperature and highest cumulative IR drop  
-C) The same temperature and IR drop as all other dies  
+A) The lowest cumulative IR drop  
+B) The highest cumulative IR drop  
+C) The same IR drop as all other dies  
 D) The best power delivery  
 
 **Q13.** A hybrid SC+LDO IVR architecture is attractive because:
@@ -133,7 +133,7 @@ D) The order does not matter
 | Q9 | B | AVS uses on-die speed monitors to adapt voltage to actual process corner |
 | Q10 | B | Header switches connect discharged capacitance to VDD, causing rush current |
 | Q11 | C | BSPD uses nano-TSVs from the wafer backside to reach buried power rails |
-| Q12 | B | Top die has the most intervening resistance and is thermally insulated by layers below |
+| Q12 | B | Its supply current crosses the TSVs and grids of every die below it, so it has the most series resistance. (Temperature is a separate question: with a top-side heat sink the die furthest from the substrate is usually the coolest.) |
 | Q13 | B | SC handles the voltage step-down efficiently, LDO regulates; no inductors needed |
 | Q14 | B | Digital processes have poor analog characteristics; leakage is high |
 | Q15 | B | UCIe standardizes the complete chiplet interface including power |

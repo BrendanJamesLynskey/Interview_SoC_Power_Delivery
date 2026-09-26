@@ -102,12 +102,12 @@ B) Two-port VNA shunt-through
 C) Time-domain reflectometry  
 D) Multimeter resistance measurement  
 
-**Q15.** For a PLL with 5 MHz bandwidth and VCO sensitivity of 10%/V, 5 mV of supply noise at 10 MHz produces approximately how much jitter?
+**Q15.** A 2 GHz PLL has a 5 MHz loop bandwidth and a VCO supply sensitivity of 10%/V (fractional frequency change per volt of supply). A 5 mV sinusoidal supply ripple at 10 MHz produces approximately how much peak jitter?
 
-A) 50 ps  
-B) 0.4 ps  
-C) 4 ps  
-D) 40 ps  
+A) 0.8 ps  
+B) 8 ps  
+C) 80 ps  
+D) 0.08 ps  
 
 **Q16.** The copper sheet resistance of a 2 oz (70 um) PCB layer is approximately:
 
@@ -136,5 +136,5 @@ D) 24.5 mOhm/sq
 | Q12 | B | Transfer impedance is the cross-coupling between two PDN ports |
 | Q13 | B | Via inductance of 0.3-1.5 nH is typical for standard PCB mounting |
 | Q14 | B | Two-port shunt-through provides the best sensitivity at low impedance |
-| Q15 | B | At 10 MHz (above 5 MHz BW), noise passes through. delta_f = 0.1*2GHz*5mV/850mV = 1.18 MHz. J = delta_f/(f_noise*2*pi*f_clk) ~ 0.4 ps |
+| Q15 | B | 10 MHz is above the 5 MHz loop bandwidth, so the loop does not correct it. delta_f = 0.1/V * 5 mV * 2 GHz = 1 MHz peak; phase deviation = delta_f / f_noise = 0.1 rad; J = 0.1 / (2*pi*2 GHz) = 8.0 ps peak |
 | Q16 | B | Rsh = rho/T = 1.72e-6/(70e-4) = 0.245 mOhm/sq |
